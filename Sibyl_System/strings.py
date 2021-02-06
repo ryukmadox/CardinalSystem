@@ -1,7 +1,7 @@
 on_string = """
-Connection successful! 
-Welcome {manager} {name}
-You are a valid user!
+Connected to seed!
+Welcome {manager} {first}
+Your validity is successfully verified.
 """
 
 # Make sure not to change these too much
