@@ -41,7 +41,7 @@ for load in to_load:
         print("------------------------------------")
 
 
-@System.on(system_cmd(pattern=r"status", allow_enforcer=True))
+@System.on(system_cmd(pattern=r"status", allow_manager=True))
 async def status(event):
     msg = await event.reply("Portable Psychological Diagnosis and Suppression System.")
     time.sleep(1)
