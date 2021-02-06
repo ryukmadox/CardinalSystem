@@ -35,7 +35,7 @@ class SibylClient(TelegramClient):
 
     async def gban(
         self,
-        enforcer=None,
+        manager=None,
         target=None,
         reason=None,
         msg_id=None,
@@ -52,11 +52,11 @@ class SibylClient(TelegramClient):
         if not auto:
             await self.send_message(
                 logs,
-                f"/gban [{target}](tg://user?id={target}) {reason} // By {enforcer} | #{msg_id}",
+                f"/gban [{target}](tg://user?id={target}) {reason} // By {manager} | #{msg_id}",
             )
             await self.send_message(
                 logs,
-                f"/fban [{target}](tg://user?id={target}) {reason} // By {enforcer} | #{msg_id}",
+                f"/fban [{target}](tg://user?id={target}) {reason} // By {manager} | #{msg_id}",
             )
         else:
             await self.send_message(
@@ -70,13 +70,13 @@ class SibylClient(TelegramClient):
         if bot:
             await self.send_message(
                 Sibyl_approved_logs,
-                bot_gban_string.format(enforcer=enforcer, scam=target, reason=reason),
+                bot_gban_string.format(manager=manager, scam=target, reason=reason),
             )
         else:
             await self.send_message(
                 Sibyl_approved_logs,
                 scan_approved_string.format(
-                    enforcer=enforcer, scam=target, reason=reason, proof_id=msg_id
+                    manager=manager, scam=target, reason=reason, proof_id=msg_id
                 ),
             )
         if not target:
@@ -85,7 +85,7 @@ class SibylClient(TelegramClient):
             victim=int(target),
             reason=reason,
             proof_id=int(msg_id),
-            enforcer=int(enforcer),
+            manager=int(manager),
             message=message,
         )
 
