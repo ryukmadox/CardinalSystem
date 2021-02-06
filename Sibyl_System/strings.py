@@ -1,6 +1,6 @@
 on_string = """
 Connected to seed!
-Welcome {manager} {first}
+Welcome {manager} {name}
 Your validity is successfully verified.
 """
 
