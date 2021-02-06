@@ -1,4 +1,4 @@
-from Sibyl_System import System, SIBYL, ENFORCERS, Sibyl_logs, system_cmd
+from Sibyl_System import System, CARDINAL, MANAGERS, Sibyl_logs, system_cmd
 import re
 import Sibyl_System.plugins.Mongo_DB.message_blacklist as db
 import Sibyl_System.plugins.Mongo_DB.name_blacklist as wlc_collection
@@ -81,7 +81,7 @@ async def listbl(event):
 @System.bot.on(events.NewMessage(incoming=True))
 async def auto_gban_request(event):
     System.processing += 1
-    if event.from_id.user_id in ENFORCERS or event.from_id.user_id in SIBYL:
+    if event.from_id.user_id in MANAGERS or event.from_id.user_id in CARDINAL:
         return
     if event.chat_id == Sibyl_logs:
         return
@@ -110,7 +110,7 @@ async def auto_gban_request(event):
 async def auto_wlc_gban(event):
     System.processing += 1
     user = await event.get_user()
-    if user.id in ENFORCERS or user.id in SIBYL:
+    if user.id in MANAGERS or user.id in CARDINAL:
         return
     words = await wlc_collection.get_wlc_bl()
     if words:
