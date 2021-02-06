@@ -89,7 +89,7 @@ async def make_collections() -> str:
     if await collection.count_documents({"_id": 4}, limit=1) == 0:  # Rank tree list
         sample_dict = {"_id": 4, "data": {}, "standalone": {}}
         sample_dict["data"] = {}
-        for x in SIBYL:
+        for x in CARDINAL:
             sample_dict["data"][str(x)] = {}
             sample_dict["standalone"][str(x)] = {
                 "added_by": 777000,
