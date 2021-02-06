@@ -28,7 +28,7 @@ except BaseException:
 json_file = os.path.join(os.getcwd(), "Sibyl_System\\elevated_users.json")
 
 
-@System.on(system_cmd(pattern=r"addenf", allow_inspectors=True))
+@System.on(system_cmd(pattern=r"addmng", allow_inspectors=True))
 async def addenf(event) -> None:
     if event.message.reply_to_msg_id:
         replied = await event.get_reply_message()
@@ -45,7 +45,7 @@ async def addenf(event) -> None:
                 "I haven't interacted with that user! Meh, Will add them anyway"
             )
     if u_id in ENFORCERS:
-        await System.send_message(event.chat_id, "That person is already Enforcer!")
+        await System.send_message(event.chat_id, "That person is already Manager!")
         return
     if HEROKU:
         config["ENFORCERS"] = os.environ.get("ENFORCERS") + " " + str(u_id)
@@ -55,7 +55,7 @@ async def addenf(event) -> None:
         data["ENFORCERS"].append(u_id)
         with open(json_file, "w") as file:
             json.dump(data, file, indent=4)
-        await System.send_message(event.chat_id, "Added to enforcers, Restarting...")
+        await System.send_message(event.chat_id, "Added to managers, Restarting...")
         if not event.from_id.user_id in SIBYL:
             await add_enforcers(event.from_id.user_id, u_id)
         await System.disconnect()
@@ -64,11 +64,11 @@ async def addenf(event) -> None:
     if not event.from_id.user_id in SIBYL:
         await add_enforcers(event.from_id.user_id, u_id)
     await System.send_message(
-        event.chat_id, f"Added [{u_id}](tg://user?id={u_id}) to Enforcers"
+        event.chat_id, f"Added [{u_id}](tg://user?id={u_id}) to Managers"
     )
 
 
-@System.on(system_cmd(pattern=r"rmenf", allow_inspectors=True))
+@System.on(system_cmd(pattern=r"rmmng", allow_inspectors=True))
 async def rmenf(event) -> None:
     if event.message.reply_to_msg_id:
         replied = await event.get_reply_message()
@@ -81,7 +81,7 @@ async def rmenf(event) -> None:
         await event.reply("Invalid ID/Username!")
     u_id = int(u_id)
     if u_id not in ENFORCERS:
-        await System.send_message(event.chat_id, "Is that person even a Enforcer?")
+        await System.send_message(event.chat_id, "Is that person even a Manager?")
         return
     if HEROKU:
         str(u_id)
@@ -99,13 +99,13 @@ async def rmenf(event) -> None:
         with open(json_file, "w") as file:
             json.dump(data, file, indent=4)
         await System.send_message(
-            event.chat_id, "Removed from enforcers, Restarting..."
+            event.chat_id, "Removed from managers, Restarting..."
         )
         await System.disconnect()
         os.execl(sys.executable, sys.executable, *sys.argv)
         quit()
     await System.send_message(
-        event.chat_id, f"Removed [{u_id}](tg://user?id={u_id}) from Enforcers"
+        event.chat_id, f"Removed [{u_id}](tg://user?id={u_id}) from Managers"
     )
 
 
@@ -135,18 +135,18 @@ async def join(event) -> None:
         await System.send_message(event.chat_id, "Joined chat!")
         await System.send_message(
             Sibyl_logs,
-            f"{(await event.get_sender()).first_name} made Sibyl join {private.group(5)}",
+            f"{(await event.get_sender()).first_name} made Cardinal join {private.group(5)}",
         )
     else:
         await System(JoinChannelRequest(link))
         await System.send_message(event.chat_id, "Joined chat!")
         await System.send_message(
             Sibyl_logs,
-            f"{(await event.get_sender()).first_name} made Sibyl join {link}",
+            f"{(await event.get_sender()).first_name} made Cardinal join {link}",
         )
 
 
-@System.on(system_cmd(pattern=r"addins"))
+@System.on(system_cmd(pattern=r"adddev"))
 async def addins(event) -> None:
     if event.reply:
         replied = await event.get_reply_message()
@@ -162,7 +162,7 @@ async def addins(event) -> None:
         await event.reply("Ivalid ID/Username!")
         return
     if u_id in INSPECTORS:
-        await System.send_message(event.chat_id, "That person is already an Inspector!")
+        await System.send_message(event.chat_id, "That person is already an Developer!")
         return
     if HEROKU:
         config["INSPECTORS"] = os.environ.get("INSPECTORS") + " " + str(u_id)
@@ -172,7 +172,7 @@ async def addins(event) -> None:
         data["INSPECTORS"].append(u_id)
         with open(json_file, "w") as file:
             json.dump(data, file, indent=4)
-        await System.send_message(event.chat_id, "Added to Inspectors, Restarting...")
+        await System.send_message(event.chat_id, "Added to Developers, Restarting...")
         await add_inspector(event.from_id.user_id, u_id)
         await System.disconnect()
         os.execl(sys.executable, sys.executable, *sys.argv)
@@ -183,7 +183,7 @@ async def addins(event) -> None:
     )
 
 
-@System.on(system_cmd(pattern=r"rmins"))
+@System.on(system_cmd(pattern=r"rmdev"))
 async def rmins(event) -> None:
     if event.message.reply_to_msg_id:
         replied = await event.get_reply_message()
@@ -195,7 +195,7 @@ async def rmins(event) -> None:
     except BaseException:
         await event.reply("Ivalid ID/Username!")
     if u_id not in INSPECTORS:
-        await System.send_message(event.chat_id, "Is that person even an Inspector?")
+        await System.send_message(event.chat_id, "Is that person even an Developer?")
         return
     u_id = str(u_id)
     if HEROKU:
@@ -213,14 +213,14 @@ async def rmins(event) -> None:
         with open(json_file, "w") as file:
             json.dump(data, file, indent=4)
         await System.send_message(
-            event.chat_id, "Removed from Inspectors, Restarting..."
+            event.chat_id, "Removed from Developers, Restarting..."
         )
         await System.disconnect()
         os.execl(sys.executable, sys.executable, *sys.argv)
         quit()
     await System.send_message(
         event.chat_id,
-        f"Removed Inspector status of [{u_id}](tg://user?id={u_id}), Now that user is a mere enforcers.",
+        f"Removed Inspector status of [{u_id}](tg://user?id={u_id}), Now that user is a mere manager.",
     )
 
 
@@ -302,16 +302,16 @@ async def redirect(event) -> None:
 
 help_plus = """
 Help!
-`addenf` - Adds a user as an enforcer.
-Format : addenf <user id / as reply>
-`rmenf` - Removes a user from enforcers.
+`addmng` - Adds a user as an manager.
+Format : addmng <user id / as reply>
+`rmmng` - Removes a user from manager.
 Format : rmenf <user id / as reply>
-`enforcers` - Lists all enforcers.
-`addins` - Adds a user as an Inspector.
-Format : addins <user id / as reply>
-`rmins` - Removes a user from Inspector.
-Format : rmins <user id / as reply>
-`inspector` - Lists all inspectors.
+`managers` - Lists all managers.
+`adddev` - Adds a user as an Developer.
+Format : adddev <user id / as reply>
+`rmdev` - Removes a user from Developer.
+Format : rmdev <user id / as reply>
+`developers` - Lists all inspectors.
 `join` - Joins a chat.
 Format : join <chat username or invite link>
 `leave` - Leaves a chat.
@@ -322,7 +322,7 @@ Format : resolve <chat invite link>
 Format : get_redirect <URL>
 **Notes:**
 `/` `?` `.` `!` are supported prefixes.
-**Example:** `/addenf` or `?addenf` or `.addenf`
+**Example:** `/addmng` or `?addmng` or `.addmng`
 """
 
 __plugin_name__ = "extras"
