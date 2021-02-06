@@ -64,7 +64,7 @@ async def addmng(event) -> None:
     if not event.from_id.user_id in CARDINAL:
         await add_enforcers(event.from_id.user_id, u_id)
     await System.send_message(
-        event.chat_id, f"Added [{u_id}](tg://user?id={u_id}) to Managers"
+        event.chat_id, f"Added [{u_id}](tg://user?id={u_id}) to Managers, Restarting..."
     )
 
 
@@ -177,9 +177,9 @@ async def adddev(event) -> None:
         await System.disconnect()
         os.execl(sys.executable, sys.executable, *sys.argv)
         quit()
-    await add_inspector(event.from_id.user_id, u_id)
+    await add_developer(event.from_id.user_id, u_id)
     await System.send_message(
-        event.chat_id, f"Added [{u_id}](tg://user?id={u_id}) to DEVELOPERS"
+        event.chat_id, f"Added [{u_id}](tg://user?id={u_id}) to DEVELOPERS, Restarting..."
     )
 
 
