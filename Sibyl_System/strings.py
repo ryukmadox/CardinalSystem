@@ -1,6 +1,6 @@
 on_string = """
 Connection successful! 
-Welcome {Manager} {name}
+Welcome {manager} {name}
 You are a valid user!
 """
 
@@ -9,7 +9,7 @@ You are a valid user!
 scan_request_string = """
 $SCAN
 Cymatic Judge request!
-**Enforcer:** {enforcer} 
+**Manager:** {manager} 
 **User scanned:** {spammer}
 **Reason:** `{reason}`
 **Judge Source:** {chat}
