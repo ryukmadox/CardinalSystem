@@ -68,7 +68,7 @@ async def addmng(event) -> None:
     )
 
 
-@System.on(system_cmd(pattern=r"rmmng", allow_inspectors=True))
+@System.on(system_cmd(pattern=r"rmmng", allow_developers=True))
 async def rmmng(event) -> None:
     if event.message.reply_to_msg_id:
         replied = await event.get_reply_message()
