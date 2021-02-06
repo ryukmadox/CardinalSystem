@@ -26,7 +26,7 @@ def get_data_from_url(url: str) -> tuple:
     return (match.group(4), match.group(5))
 
 
-@System.on(system_cmd(pattern=r"scan ", allow_enforcer=True))
+@System.on(system_cmd(pattern=r"judge ", allow_enforcer=True))
 async def scan(event):
     replied = await event.get_reply_message()
     flags, reason = seprate_flags(event.text)
@@ -99,7 +99,7 @@ async def scan(event):
         if event.chat.username
         else f"t.me/c/{event.chat.id}/{event.message.id}"
     )
-    await event.reply("Connecting to Sibyl for a cymatic scan.")
+    await event.reply("Connecting to Cardinal for a cymatic scan.")
     if req_proof and req_user:
         await replied.forward_to(Sibyl_logs)
         await System.gban(
@@ -136,10 +136,10 @@ async def revive(event):
         return
     a = await event.reply("Reverting bans..")
     await System.ungban(user_id, f" By //{(await event.get_sender()).id}")
-    await a.edit("Revert request sent to sibyl. This might take 10minutes or so.")
+    await a.edit("Revert request sent to cardinal. This might take 5minutes or so.")
 
 
-@System.on(system_cmd(pattern=r"sibyl logs"))
+@System.on(system_cmd(pattern=r"cardinal logs"))
 async def logs(event):
     await System.send_file(event.chat_id, "log.txt")
 
@@ -266,8 +266,8 @@ help_plus = """
 Here is the help for **Main**:
 
 Commands:
-    `scan` - Reply to a message WITH reason to send a request to Inspectors/Sibyl for judgement
-    `approve` - Approve a scan request (Only works in Sibyl System Base)
+    `judge` - Reply to a message WITH reason to send a request to Developers for judgement
+    `approve` - Approve a scan request (Only works in Cardinal System Seed)
     `revert` or `revive` or `restore` - Ungban ID
     `qproof` - Get quick proof from database for given user id
     `proof` - Get message from proof id which is at the end of gban msg
@@ -275,9 +275,9 @@ Commands:
 
 Flags:
     scan:
-        `-f` - Force approve a scan. Using this with scan will auto approve it (Inspectors+)
-        `-u` - Grab message from url. Use this with message link to scan the user the message link redirects to. (Enforcers+)
-        `-o` - Original Sender. Using this will gban orignal sender instead of forwarder (Enforcers+)
+        `-f` - Force approve a scan. Using this with scan will auto approve it (Developers+)
+        `-u` - Grab message from url. Use this with message link to scan the user the message link redirects to. (Managers+)
+        `-o` - Original Sender. Using this will gban orignal sender instead of forwarder (Managers+)
     approve:
         `-or` - Overwrite reason. Use this to change scan reason.
     reject:
