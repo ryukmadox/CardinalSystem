@@ -3,8 +3,8 @@ from telethon.tl.functions.channels import LeaveChannelRequest
 from telethon.tl.functions.channels import JoinChannelRequest
 from telethon.tl.functions.messages import ImportChatInviteRequest
 
-from Sibyl_System.plugins.Mongo_DB.tree import add_inspector, add_enforcers, get_data
-from Sibyl_System import ENFORCERS, INSPECTORS, SIBYL, session
+from Sibyl_System.plugins.Mongo_DB.tree import add_developer, add_manager, get_data
+from Sibyl_System import MANAGERS, DEVELOPERS, CARDINAL, session
 from Sibyl_System import System, system_cmd
 from Sibyl_System import Sibyl_logs
 
@@ -28,8 +28,8 @@ except BaseException:
 json_file = os.path.join(os.getcwd(), "Sibyl_System\\elevated_users.json")
 
 
-@System.on(system_cmd(pattern=r"addmng", allow_inspectors=True))
-async def addenf(event) -> None:
+@System.on(system_cmd(pattern=r"addmng", allow_developers=True))
+async def addmng(event) -> None:
     if event.message.reply_to_msg_id:
         replied = await event.get_reply_message()
         if replied:
@@ -44,24 +44,24 @@ async def addenf(event) -> None:
             await event.reply(
                 "I haven't interacted with that user! Meh, Will add them anyway"
             )
-    if u_id in ENFORCERS:
+    if u_id in MANAGERS:
         await System.send_message(event.chat_id, "That person is already Manager!")
         return
     if HEROKU:
-        config["ENFORCERS"] = os.environ.get("ENFORCERS") + " " + str(u_id)
+        config["MANAGERS"] = os.environ.get("MANAGERS") + " " + str(u_id)
     else:
         with open(json_file, "r") as file:
             data = json.load(file)
-        data["ENFORCERS"].append(u_id)
+        data["MANAGERS"].append(u_id)
         with open(json_file, "w") as file:
             json.dump(data, file, indent=4)
         await System.send_message(event.chat_id, "Added to managers, Restarting...")
-        if not event.from_id.user_id in SIBYL:
-            await add_enforcers(event.from_id.user_id, u_id)
+        if not event.from_id.user_id in CARDINAL:
+            await add_manager(event.from_id.user_id, u_id)
         await System.disconnect()
         os.execl(sys.executable, sys.executable, *sys.argv)
         quit()
-    if not event.from_id.user_id in SIBYL:
+    if not event.from_id.user_id in CARDINAL:
         await add_enforcers(event.from_id.user_id, u_id)
     await System.send_message(
         event.chat_id, f"Added [{u_id}](tg://user?id={u_id}) to Managers"
@@ -69,7 +69,7 @@ async def addenf(event) -> None:
 
 
 @System.on(system_cmd(pattern=r"rmmng", allow_inspectors=True))
-async def rmenf(event) -> None:
+async def rmmng(event) -> None:
     if event.message.reply_to_msg_id:
         replied = await event.get_reply_message()
         u_id = replied.sender.id
@@ -80,22 +80,22 @@ async def rmenf(event) -> None:
     except BaseException:
         await event.reply("Invalid ID/Username!")
     u_id = int(u_id)
-    if u_id not in ENFORCERS:
+    if u_id not in MANAGERS:
         await System.send_message(event.chat_id, "Is that person even a Manager?")
         return
     if HEROKU:
         str(u_id)
-        ENF = os.environ.get("ENFORCERS")
+        ENF = os.environ.get("MANAGERS")
         if ENF.endswith(u_id):
-            config["ENFORCERS"] = ENF.strip(" " + str(u_id))
+            config["MANAGERS"] = ENF.strip(" " + str(u_id))
         elif ENF.startswith(u_id):
-            config["ENFORCERS"] = ENF.strip(str(u_id) + " ")
+            config["MANAGERS"] = ENF.strip(str(u_id) + " ")
         else:
-            config["ENFORCERS"] = ENF.strip(" " + str(u_id) + " ")
+            config["MANAGERS"] = ENF.strip(" " + str(u_id) + " ")
     else:
         with open(json_file, "r") as file:
             data = json.load(file)
-        data["ENFORCERS"].remove(u_id)
+        data["MANAGERS"].remove(u_id)
         with open(json_file, "w") as file:
             json.dump(data, file, indent=4)
         await System.send_message(
@@ -109,10 +109,10 @@ async def rmenf(event) -> None:
     )
 
 
-@System.on(system_cmd(pattern=r"enforcers", allow_inspectors=True))
+@System.on(system_cmd(pattern=r"managers", allow_developers=True))
 async def listuser(event) -> None:
-    msg = "Enforcers:\n"
-    for z in ENFORCERS:
+    msg = "Managers:\n"
+    for z in MANAGERS:
         try:
             user = await System.get_entity(z)
             msg += f"•[{user.first_name}](tg://user?id={user.id}) | {z}\n"
@@ -121,7 +121,7 @@ async def listuser(event) -> None:
     await System.send_message(event.chat_id, msg)
 
 
-@System.on(system_cmd(pattern=r"join", allow_inspectors=True))
+@System.on(system_cmd(pattern=r"join", allow_developers=True))
 async def join(event) -> None:
     try:
         link = event.text.split(" ", 1)[1]
@@ -147,7 +147,7 @@ async def join(event) -> None:
 
 
 @System.on(system_cmd(pattern=r"adddev"))
-async def addins(event) -> None:
+async def adddev(event) -> None:
     if event.reply:
         replied = await event.get_reply_message()
         if replied:
@@ -161,30 +161,30 @@ async def addins(event) -> None:
     except BaseException:
         await event.reply("Ivalid ID/Username!")
         return
-    if u_id in INSPECTORS:
+    if u_id in DEVELOPERS:
         await System.send_message(event.chat_id, "That person is already an Developer!")
         return
     if HEROKU:
-        config["INSPECTORS"] = os.environ.get("INSPECTORS") + " " + str(u_id)
+        config["DEVELOPERS"] = os.environ.get("DEVELOPERS") + " " + str(u_id)
     else:
         with open(json_file, "r") as file:
             data = json.load(file)
-        data["INSPECTORS"].append(u_id)
+        data["DEVELOPERS"].append(u_id)
         with open(json_file, "w") as file:
             json.dump(data, file, indent=4)
         await System.send_message(event.chat_id, "Added to Developers, Restarting...")
-        await add_inspector(event.from_id.user_id, u_id)
+        await add_developer(event.from_id.user_id, u_id)
         await System.disconnect()
         os.execl(sys.executable, sys.executable, *sys.argv)
         quit()
     await add_inspector(event.from_id.user_id, u_id)
     await System.send_message(
-        event.chat_id, f"Added [{u_id}](tg://user?id={u_id}) to INSPECTORS"
+        event.chat_id, f"Added [{u_id}](tg://user?id={u_id}) to DEVELOPERS"
     )
 
 
 @System.on(system_cmd(pattern=r"rmdev"))
-async def rmins(event) -> None:
+async def rmdev(event) -> None:
     if event.message.reply_to_msg_id:
         replied = await event.get_reply_message()
         u_id = replied.sender.id
@@ -194,22 +194,22 @@ async def rmins(event) -> None:
         u_id = (await System.get_entity(u_id)).id
     except BaseException:
         await event.reply("Ivalid ID/Username!")
-    if u_id not in INSPECTORS:
+    if u_id not in DEVELOPERS:
         await System.send_message(event.chat_id, "Is that person even an Developer?")
         return
     u_id = str(u_id)
     if HEROKU:
-        ENF = os.environ.get("INSPECTORS")
+        ENF = os.environ.get("DEVELOPERS")
         if ENF.endswith(u_id):
-            config["INSPECTORS"] = ENF.strip(" " + str(u_id))
+            config["DEVELOPERS"] = ENF.strip(" " + str(u_id))
         elif ENF.startswith(u_id):
-            config["INSPECTORS"] = ENF.strip(str(u_id) + " ")
+            config["DEVELOPERS"] = ENF.strip(str(u_id) + " ")
         else:
-            config["INSPECTORS"] = ENF.strip(" " + str(u_id) + " ")
+            config["DEVELOPERS"] = ENF.strip(" " + str(u_id) + " ")
     else:
         with open(json_file, "r") as file:
             data = json.load(file)
-        data["INSPECTORS"].remove(u_id)
+        data["DEVELOPERS"].remove(u_id)
         with open(json_file, "w") as file:
             json.dump(data, file, indent=4)
         await System.send_message(
@@ -220,11 +220,11 @@ async def rmins(event) -> None:
         quit()
     await System.send_message(
         event.chat_id,
-        f"Removed Inspector status of [{u_id}](tg://user?id={u_id}), Now that user is a mere manager.",
+        f"Removed Developer status of [{u_id}](tg://user?id={u_id}), Now that user is a mere manager.",
     )
 
 
-@System.on(system_cmd(pattern=r"info ", allow_inspectors=True))
+@System.on(system_cmd(pattern=r"info ", allow_developers=True))
 async def info(event) -> None:
     data = (await get_data())["standalone"]
     if not event.text.split(" ", 1)[1] in data.keys():
@@ -236,10 +236,10 @@ async def info(event) -> None:
     await event.reply(msg)
 
 
-@System.on(system_cmd(pattern=r"inspectors", allow_inspectors=True))
+@System.on(system_cmd(pattern=r"developers", allow_developers=True))
 async def listuserI(event) -> None:
-    msg = "Inspectors:\n"
-    for z in INSPECTORS:
+    msg = "Developers:\n"
+    for z in DEVELOPERS:
         try:
             user = await System.get_entity(z)
             msg += f"•[{user.first_name}](tg://user?id={user.id}) | {z}\n"
@@ -248,7 +248,7 @@ async def listuserI(event) -> None:
     await System.send_message(event.chat_id, msg)
 
 
-@System.on(system_cmd(pattern=r"resolve", allow_inspectors=True))
+@System.on(system_cmd(pattern=r"resolve", allow_developers=True))
 async def resolve(event) -> None:
     try:
         link = event.text.split(" ", 1)[1]
@@ -281,14 +281,14 @@ async def leave(event) -> None:
     if c_id:
         await System(LeaveChannelRequest(int(c_id.group(0))))
         await System.send_message(
-            event.chat_id, f"Sibyl has left chat with id[-{c_id.group(1)}]"
+            event.chat_id, f"Cardinal has left chat with id[-{c_id.group(1)}]"
         )
     else:
         await System(LeaveChannelRequest(link))
-        await System.send_message(event.chat_id, f"Sibyl has left chat[{link}]")
+        await System.send_message(event.chat_id, f"Cardinal has left chat[{link}]")
 
 
-@System.on(system_cmd(pattern=r"get_redirect ", allow_inspectors=True))
+@System.on(system_cmd(pattern=r"get_redirect ", allow_developers=True))
 async def redirect(event) -> None:
     try:
         of = event.text.split(" ", 1)[1]
