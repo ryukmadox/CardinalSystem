@@ -10,7 +10,7 @@ async def get_data() -> dict:
     return data
 
 
-async def add_inspector(sibyl: int, inspector: int) -> True:
+async def add_developer(cardinal: int, developer: int) -> True:
     data = await get_data()
     data["data"][str(sibyl)][str(inspector)] = []
     data["standalone"][str(inspector)] = {
@@ -20,7 +20,7 @@ async def add_inspector(sibyl: int, inspector: int) -> True:
     await db.replace_one(await get_data(), data)
 
 
-async def add_enforcers(inspector: int, enforcer: int) -> True:
+async def add_manager(developer: int, developer: int) -> True:
     data = await get_data()
     sibyl = data["standalone"][str(inspector)]["addedby"]
     if sibyl == 777000:
