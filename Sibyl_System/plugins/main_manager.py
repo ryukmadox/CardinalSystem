@@ -1,4 +1,4 @@
-from Sibyl_System import Sibyl_logs, ENFORCERS, SIBYL, INSPECTORS
+from Sibyl_System import Sibyl_logs, MANAGERS, CARDINAL, DEVELOPERS
 from Sibyl_System.strings import (
     scan_request_string,
     reject_string,
@@ -26,7 +26,7 @@ def get_data_from_url(url: str) -> tuple:
     return (match.group(4), match.group(5))
 
 
-@System.on(system_cmd(pattern=r"judge ", allow_enforcer=True))
+@System.on(system_cmd(pattern=r"judge ", allow_manager=True))
 async def scan(event):
     replied = await event.get_reply_message()
     flags, reason = seprate_flags(event.text)
@@ -52,12 +52,12 @@ async def scan(event):
         if not message:
             await event.reply("Failed to get data from url")
             return
-        if message.from_id.user_id in ENFORCERS:
+        if message.from_id.user_id in MANAGERS:
             return
         msg = await System.send_message(
             Sibyl_logs,
             scan_request_string.format(
-                enforcer=executor,
+                manager=executor,
                 spammer=message.from_id.user_id,
                 chat=f"https://t.me/{data[0]}/{data[1]}",
                 message=message.text,
@@ -71,7 +71,7 @@ async def scan(event):
         if replied.fwd_from:
             reply = replied.fwd_from
             target = reply.from_id.user_id
-            if reply.from_id.user_id in ENFORCERS or reply.from_id.user_id in SIBYL:
+            if reply.from_id.user_id in MANAGERS or reply.from_id.user_id in CARDINAL:
                 return
             if not reply.from_id.user_id:
                 await event.reply("Cannot get user ID.")
@@ -81,13 +81,13 @@ async def scan(event):
             else:
                 sender = f"[{reply.from_id.user_id}](tg://user?id={reply.from_id.user_id})"
     else:
-        if replied.sender.id in ENFORCERS:
+        if replied.sender.id in MANAGERS:
             return
         sender = f"[{replied.sender.first_name}](tg://user?id={replied.sender.id})"
         target = replied.sender.id
     executer = await event.get_sender()
     req_proof = req_user = False
-    if "f" in flags.keys() and executer.id in INSPECTORS:
+    if "f" in flags.keys() and executer.id in DEVELOPERS:
         approve = True
     else:
         approve = False
@@ -109,7 +109,7 @@ async def scan(event):
         msg = await System.send_message(
             Sibyl_logs,
             scan_request_string.format(
-                enforcer=executor,
+                manager=executor,
                 spammer=sender,
                 chat=chat,
                 message=replied.text,
@@ -120,7 +120,7 @@ async def scan(event):
     msg = await System.send_message(
         Sibyl_logs,
         forced_scan_string.format(
-            ins=executor, spammer=sender, chat=chat, message=replied.text, reason=reason
+            dev=executor, spammer=sender, chat=chat, message=replied.text, reason=reason
         ),
     )
     await System.gban(
@@ -128,7 +128,7 @@ async def scan(event):
     )
 
 
-@System.on(system_cmd(pattern=r"re(vive|vert|store) ", allow_inspectors=True))
+@System.on(system_cmd(pattern=r"re(vive|vert|store) ", allow_developers=True))
 async def revive(event):
     try:
         user_id = event.text.split(" ", 1)[1]
@@ -144,7 +144,7 @@ async def logs(event):
     await System.send_file(event.chat_id, "log.txt")
 
 
-@System.on(system_cmd(pattern=r"approve", allow_inspectors=True, force_reply=True))
+@System.on(system_cmd(pattern=r"approve", allow_developers=True, force_reply=True))
 async def approve(event):
     replied = await event.get_reply_message()
     match = re.match(r"\$SCAN", replied.text)
@@ -168,7 +168,7 @@ async def approve(event):
                 bot = False
             reason = re.search("\*\*Reason:\*\* (.*)", replied.text).group(1)
             await System.gban(
-                enforcer=me.id,
+                manager=me.id,
                 target=id,
                 reason=reason,
                 msg_id=replied.id,
@@ -204,11 +204,11 @@ async def approve(event):
             else:
                 id1 = list[0]
                 id2 = re.findall(r"(\d+)", replied.text)[1]
-            if id1 in ENFORCERS or SIBYL:
-                enforcer = id1
+            if id1 in MANAGERS or CARDINAL:
+                manager = id1
                 scam = id2
             else:
-                enforcer = id2
+                manager = id2
                 scam = id1
             try:
                 bot = (await System.get_entity(scam)).bot
@@ -232,7 +232,7 @@ async def approve(event):
                 )
 
 
-@System.on(system_cmd(pattern=r"reject", allow_inspectors=True, force_reply=True))
+@System.on(system_cmd(pattern=r"reject", allow_developers=True, force_reply=True))
 async def reject(event):
     # print('Trying OmO')
     replied = await event.get_reply_message()
