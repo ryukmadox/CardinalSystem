@@ -24,7 +24,7 @@ async def update_gban(
     victim: int,
     reason: Optional[str] = None,
     proof_id: Optional[int] = None,
-    enforcer: Optional[int] = None,
+    manager: Optional[int] = None,
     message: Optional[str] = None,
 ) -> True:
     gbans_dict = await get_gban(victim)
@@ -34,7 +34,7 @@ async def update_gban(
         if proof_id:
             gbans_dict["proof_id"] = proof_id
         if enforcer:
-            gbans_dict["enforcer"] = enforcer
+            gbans_dict["manager"] = manager
         if message:
             gbans_dict["message"] = message
         gbans_dict["timestamp"] = datetime.timestamp(datetime.now())
@@ -43,7 +43,7 @@ async def update_gban(
         gbans_dict = {
             "user": victim,
             "reason": reason,
-            "enforcer": enforcer,
+            "manager": manager,
             "proof_id": proof_id,
             "message": message,
             "timestamp": datetime.timestamp(datetime.now()),
