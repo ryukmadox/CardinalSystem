@@ -174,10 +174,10 @@ async def inline_handler(event):
         if len(split) != 5:
             result = builder.article("Not enough info provided...")
         else:
-            u_id, enforcer, source, reason, message = split
+            u_id, manager, source, reason, message = split
             dict_ = {
                 "u_id": u_id,
-                "enforcer": enforcer,
+                "manager": manager,
                 "source": source,
                 "reason": reason,
                 "message": message,
@@ -205,7 +205,7 @@ async def inline_handler(event):
     else:
         result = builder.article(
             "No type provided",
-            text="Use\nproof <user_id> to get proof\nbuilder id:::enforcer:::source:::reason:::message",
+            text="Use\nproof <user_id> to get proof\nbuilder id:::manager:::source:::reason:::message",
         )
     await event.answer([result])
 
