@@ -221,7 +221,7 @@ async def approve(event):
             except:
                 message = None
             await System.gban(
-                enforcer, scam, reason, replied.id, sender, bot=bot, message=message
+                manager, scam, reason, replied.id, sender, bot=bot, message=message
             )
             orig = re.search(r"t.me/(\w+)/(\d+)", replied.text)
             if orig:
