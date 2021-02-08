@@ -4,10 +4,10 @@
 [![Stars](https://img.shields.io/github/stars/AnimeKaizoku/SibylSystem?style=social)](https://github.com/AnimeKaizoku/SibylSystem "Sibyl System")
 [![Maintained](https://img.shields.io/badge/Maintained-Yes-brightgreen)](https://github.com/AnimeKaizoku/SibylSystem "Sibyl System")
 
-# Sibyl System
+# Cardinal System
 > A proactive judgement system for group chats.
 
-[![Sibyl System](https://vignette.wikia.nocookie.net/psychopass/images/7/72/Sibyl_System.png/revision/latest?cb=20141029202159 "Sibyl System")](https://github.com/AnimeKaizoku/SibylSystem "Sibyl System")
+[![Cardinal System](https://telegra.ph/file/abd1a8268dd195f02b9b8.jpg "Cardinal System")](https://github.com/minatouzuki/CardinalSystem "Cardinal System")
 [![forthebadge made-with-python](http://ForTheBadge.com/images/badges/made-with-python.svg)](https://www.python.org/)
 
 ## A Telethon Userbot to make gbanning easy
@@ -17,8 +17,8 @@ Here stuff you need to put in config.py or Environment variables:
 - ` API_ID_KEY` Get from [my.telegram.org/apps](https://my.telegram.org/apps)
 - ` API_HASH_KEY` Get from [my.telegram.org/apps](https://my.telegram.org/apps)
 - `STRING_SESSION`:  You can get this by doing `python3 generatestringsession.py` on Linux and Mac, If on windows just python will work
-- ` SIBYL `: Users who approve gbans, manage blacklist etc.
-- ` ENFORCERS `: Users who send gban request
+- ` CARDINAL `: Users who approve gbans, manage blacklist etc.
+- ` MANAGERS `: Users who send gban request
 - ` Sibyl_logs `: In this group all scan request come
 - ` Sibyl_approved_logs `: When approved it sends a message there
 - ` GBAN_MSG_LOGS `:Where to gban user, Set to None and it will send /gban in Sibyl_logs
