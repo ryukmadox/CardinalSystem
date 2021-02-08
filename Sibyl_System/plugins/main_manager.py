@@ -71,7 +71,7 @@ async def scan(event):
         if replied.fwd_from:
             reply = replied.fwd_from
             target = reply.from_id.user_id
-            if reply.from_id.user_id in MANAGERS or reply.from_id.user_id in CARDINAL:
+            if reply.from_id.user_id in MANAGERS or reply.from_id.user_id in DEVELOPERS:
                 return
             if not reply.from_id.user_id:
                 await event.reply("Cannot get user ID.")
